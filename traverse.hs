@@ -26,16 +26,16 @@ testTree = Node "root" [(Node "one" []), (Node "two" [(Node "three" [])])]
 
 -- copied from Hoogle's gshow and then modified to name as we need...
 gpretty :: Data a => a -> String
-gpretty x = gprettys x ""
+gpretty x = gprettys 0 x ""
 
 -- | Generic shows
-gprettys :: Data a => a -> ShowS
+gprettys :: Data a => Int -> a -> ShowS
 
 -- -- This is a prefix-show using surrounding "(" and ")",
 -- -- where we recurse into subterms with gmapQ.
-gprettys = ( \t ->
-               showChar '('
+gprettys n = ( \t ->
+               showString (replicate (n*2) ' ')
              . (showString . showConstr . toConstr $ t)
-             . (foldr (.) id . gmapQ ((showChar ' ' .) . gprettys) $ t)
-             . showChar ')'
-           ) `extQ` (shows :: String -> ShowS)
+             . showChar '\n'
+             . (foldr (.) id . gmapQ (gprettys (n+1)) $ t)
+           ) `extQ` ((\s -> (showString $ replicate (n*2) ' ') . shows s . showChar '\n') :: String -> ShowS)
