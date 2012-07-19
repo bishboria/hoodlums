@@ -6,6 +6,7 @@ import Data.Data
 import Data.Typeable
 import Data.Generics.Aliases
 
+-- This was the original solution
 data Tree a = Node a [Tree a]
             deriving (Show, Data, Typeable)
 
@@ -24,7 +25,9 @@ instance (Pretty a) => Pretty (Tree a) where
 testTree = Node "root" [(Node "one" []), (Node "two" [(Node "three" [])])]
 
 
--- copied from Hoogle's gshow and then modified to name as we need...
+-- This was the final code that was used to pretty print our tree
+--
+-- copied from Hoogle's gshow and then modified to as we need...
 gpretty :: Data a => a -> String
 gpretty x = gprettys 0 x ""
 
