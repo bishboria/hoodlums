@@ -1,4 +1,4 @@
 hoodlums
 ========
 
-Code worked on at London Hoodlums group
+Code worked on at London Hoodlums Haskell group.
