@@ -1,20 +1,27 @@
 {-# language TypeSynonymInstances, FlexibleInstances #-}
 
+-- Trying to create an unfixed structure so you can pretty print
+-- some other (recursive) data structure
+
 module Traverse where
 
-data Tree a = Node a [Tree a]
+data TreeF a r = Node a [r]
             deriving Show
 
-class Pretty a where
-    pretty :: a -> String
+newtype Fix f = Fix (f (Fix f))
 
-instance Pretty String where
-    pretty s = s
+type Tree a = Fix (TreeF a)
 
-instance (Pretty a) => Pretty (Tree a) where
-    pretty tree = pprint 0 tree
-        where
-            pprint n (Node name ns) =
-                replicate (n*2) ' ' ++ pretty name ++ "\n" ++ concatMap (pprint (n+1)) ns
+{-class Pretty a where-}
+    {-pretty :: a -> String-}
 
-testTree = Node "root" [(Node "one" []), (Node "two" [(Node "three" [])])]
+{-instance Pretty String where-}
+    {-pretty s = s-}
+
+{-instance (Pretty a) => Pretty (Tree a) where-}
+    {-pretty tree = pprint 0 tree-}
+        {-where-}
+            {-pprint n (Node name ns) =-}
+                {-replicate (n*2) ' ' ++ pretty name ++ "\n" ++ concatMap (pprint (n+1)) ns-}
+
+{-testTree = Node "root" [(Node "one" []), (Node "two" [(Node "three" [])])]-}
