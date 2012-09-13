@@ -43,6 +43,8 @@ prefs =
     , Pref "D" [0,1]
     ]
 
+type State = ([Int],[Offer],[Pref])
+
 allocate :: [School] -> [Pref] -> [Offer]
 allocate schools prefs = offers
     where
@@ -55,5 +57,15 @@ allocate schools prefs = offers
 
         pans = map schPan schools
 
-        go :: ([Int], [Offer], [Pref]) -> Pref -> ([Int], [Offer], [Pref])
-        go (pans, offers, prefs) p = undefined
+        go :: State -> Pref -> State
+        go (pans, offers, unallocated) p@(Pref student choices) =
+            foldr f (pans,offers,p:unallocated) choices
+                where
+                    f :: Int -> State -> State
+                    f sch cont =
+                        if rank < pans !! sch
+                        then (pans',Offer student sch : offers, unallocated)
+                        else cont
+                        where
+                            rank = (schools' !! sch) Map.! student
+                            pans' = undefined
