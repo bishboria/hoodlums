@@ -12,13 +12,27 @@
  - Sounds like a Nash Equilibrium problem.
  -}
 
- module Schools where
+module Schools where
 
- type Student = String
+type Student = String
 
- -- Pan = pupil allocation number = number of children in the school
- data School = School {schPan :: Int, schPriority :: [Student]}
+-- Pan = pupil allocation number = number of children in the school
+data School = School {schPan :: Int, schPriority :: [Student]}
     deriving (Show, Eq, Ord)
 
- data Pref = Pref {prefStudent :: Student, prefChoices :: [Int]}
+data Pref = Pref {prefStudent :: Student, prefChoices :: [Int]}
     deriving (Show, Eq, Ord)
+
+schools :: [School]
+schools =
+    [ School 2 ["A", "B", "C", "D"]
+    , School 2 ["B", "D", "A", "C"]
+    ]
+
+prefs :: [Pref]
+prefs =
+    [ Pref "A" [0,1]
+    , Pref "B" [0,1]
+    , Pref "C" [1,0]
+    , Pref "D" [0,1]
+    ]
