@@ -31,14 +31,14 @@ data Offer = Offer {offStudent :: Student, offSchool :: Int}
 
 schools :: [School]
 schools =
-    [ School 2 ["A", "B", "C", "D"]
+    [ School 2 ["A", "B", "D", "C"]
     , School 2 ["B", "D", "A", "C"]
     ]
 
 prefs :: [Pref]
 prefs =
     [ Pref "A" [0,1]
-    , Pref "B" [0,1]
+    , Pref "B" [1,0]
     , Pref "C" [1,0]
     , Pref "D" [0,1]
     ]
@@ -68,4 +68,7 @@ allocate schools prefs = offers
                         else cont
                         where
                             rank = (schools' !! sch) Map.! student
-                            pans' = undefined
+                            pans' = zipWith conditionalInc [0..] pans
+
+                            conditionalInc i pan | i == sch  = pan
+                                                 | otherwise = pan + 1
