@@ -15,6 +15,8 @@
 
 module Schools where
 
+import qualified Data.Map as Map
+
 type Student = String
 
 -- Pan = pupil allocation number = number of children in the school
@@ -42,4 +44,16 @@ prefs =
     ]
 
 allocate :: [School] -> [Pref] -> [Offer]
-allocate schools prefs = []
+allocate schools prefs = offers
+    where
+        (_,offers,_) = foldl go (pans,[],[]) prefs
+        ranking :: School -> Map.Map Student Int
+        ranking (School _ priority) = Map.fromList $ zip priority [0..]
+
+        schools' :: [Map.Map Student Int]
+        schools' = map ranking schools
+
+        pans = map schPan schools
+
+        go :: ([Int], [Offer], [Pref]) -> Pref -> ([Int], [Offer], [Pref])
+        go (pans, offers, prefs) p = undefined
