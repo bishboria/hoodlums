@@ -10,6 +10,7 @@
  - own.
  -
  - Sounds like a Nash Equilibrium problem.
+ - Could also be the Stable Marriage Problem.
  -}
 
 module Schools where
