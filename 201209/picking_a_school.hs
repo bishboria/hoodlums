@@ -23,6 +23,9 @@ data School = School {schPan :: Int, schPriority :: [Student]}
 data Pref = Pref {prefStudent :: Student, prefChoices :: [Int]}
     deriving (Show, Eq, Ord)
 
+data Offer = Offer {offStudent :: Student, offSchool :: Int}
+    deriving (Show, Eq, Ord)
+
 schools :: [School]
 schools =
     [ School 2 ["A", "B", "C", "D"]
@@ -36,3 +39,6 @@ prefs =
     , Pref "C" [1,0]
     , Pref "D" [0,1]
     ]
+
+allocate :: [School] -> [Pref] -> [Offer]
+allocate schools prefs = []
