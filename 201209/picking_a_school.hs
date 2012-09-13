@@ -48,7 +48,14 @@ type State = ([Int],[Offer],[Pref])
 allocate :: [School] -> [Pref] -> [Offer]
 allocate schools prefs = offers
     where
-        (_,offers,_) = foldl go (pans,[],[]) prefs
+        (_,offers,_) = until done iteration (pans,[],prefs)
+
+        iteration (pans, offers, unallocated) = foldl go (pans,offers,[]) unallocated
+
+        done :: State -> Bool
+        done (_,_,[]) = True
+        done _        = False
+
         ranking :: School -> Map.Map Student Int
         ranking (School _ priority) = Map.fromList $ zip priority [0..]
 
