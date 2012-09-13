@@ -15,7 +15,12 @@
 
 module Schools where
 
+import Data.Vector (Vector)
+import qualified Data.Vector as Vector
+import Data.Map (Map,(!))
 import qualified Data.Map as Map
+
+(!!!) = (Vector.!)
 
 type Student = String
 
@@ -43,7 +48,7 @@ prefs =
     , Pref "D" [0,1]
     ]
 
-type State = ([Int],[Offer],[Pref])
+type State = (Vector Int,[Offer],[Pref])
 
 allocate :: [School] -> [Pref] -> [Offer]
 allocate schools prefs = offers
@@ -56,13 +61,13 @@ allocate schools prefs = offers
         done (_,_,[]) = True
         done _        = False
 
-        ranking :: School -> Map.Map Student Int
+        ranking :: School -> Map Student Int
         ranking (School _ priority) = Map.fromList $ zip priority [0..]
 
-        schools' :: [Map.Map Student Int]
-        schools' = map ranking schools
+        schools' :: Vector (Map Student Int)
+        schools' = Vector.fromList $ map ranking schools
 
-        pans = map schPan schools
+        pans = Vector.fromList $ map schPan schools
 
         go :: State -> Pref -> State
         go (pans, offers, unallocated) p@(Pref student choices) =
@@ -70,12 +75,12 @@ allocate schools prefs = offers
                 where
                     f :: Int -> State -> State
                     f sch cont =
-                        if rank < pans !! sch
+                        if rank < (pans !!! sch)
                         then (pans',Offer student sch : offers, unallocated)
                         else cont
                         where
-                            rank = (schools' !! sch) Map.! student
-                            pans' = zipWith conditionalInc [0..] pans
+                            rank = (schools' !!! sch) ! student
+                            pans' = Vector.imap conditionalInc pans
 
                             conditionalInc i pan | i == sch  = pan
                                                  | otherwise = pan + 1
