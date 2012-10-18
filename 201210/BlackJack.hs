@@ -97,17 +97,22 @@ valueHand :: [Card] -> Maybe Int
 valueHand = listToMaybe . dropWhile (> 21) . allValues . map valueCard
 
 allValues :: [[Int]] -> [Int]
+allValues []  = [0]
 allValues [x] = x
 allValues (is:iss) = [ i + j | i <- is, j <- allValues iss ]
 
 main = runBlackJack $ do
     dumpDeck
-    c1 <- dealACard
-    c2 <- dealACard
-    let h = [c1, c2]
-    liftIO $ print h
-    liftIO $ print (valueHand h)
-    dumpDeck
+    {-c1 <- dealACard-}
+    {-c2 <- dealACard-}
+    {-let h = [c1, c2]-}
+    {-liftIO $ print h-}
+    {-liftIO $ print (valueHand h)-}
+    {-dumpDeck-}
+    let h = []
+    h' <- loop h minHandTest (\h -> dealACard >>= return . (:h))
+    liftIO $ print h'
+    liftIO $ print (valueHand h')
 
 
 minHandTest :: [Card] -> Bool
@@ -116,9 +121,9 @@ minHandTest h = case (valueHand h) of
                     (Just n) | n > 12 -> True
                     _                 -> False
 
-loop :: Monad m => a -> (a -> Bool) -> m a -> m a
+loop :: Monad m => a -> (a -> Bool) -> (a -> m a) -> m a
 loop v p a
     | p v       = return v
     | otherwise = do
-        v <- a
+        v <- a v
         loop v p a
