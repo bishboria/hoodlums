@@ -1,6 +1,3 @@
--- needs random-shuffle from cabal
--- will be using shuffleM
-
 module BlackJack where
 
 import Control.Monad.State
