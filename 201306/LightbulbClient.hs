@@ -16,7 +16,7 @@ main = withSocketsDo $ do
     bulbs <- mapM (fmap (SockAddrInet port) . inet_addr) bulbHosts
     setSocketOption s Broadcast 1
     void $ forever $ do
-        msg <- getLine
-        forM_ bulbs $ sendTo s msg
+        (r,g,b) <- readLn
+        forM_ bulbs $ sendTo s $ map toEnum $ [r,g,b,5]
     sClose s
     return ()
