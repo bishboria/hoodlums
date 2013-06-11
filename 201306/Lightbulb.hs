@@ -1,4 +1,4 @@
-module LightBulb where
+module Main where
 
 import Network.Socket
 import Control.Monad (forever, when)
